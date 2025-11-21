@@ -8,6 +8,9 @@ public class EnemyAI : MonoBehaviour
     public float speed = 3f;
     public float followRange = 5f;
 
+    [Header("Ödül")]
+    public int scoreValue = 10;
+
     [Header("Sald�r� & Fizik")]
     public int damage = 20;
     public float knockbackForce = 10f; // �tme g�c�
@@ -16,6 +19,8 @@ public class EnemyAI : MonoBehaviour
     private Rigidbody2D rb;
     private int currentHealth = 100; // Basit can sistemi
     private bool isKnockedBack = false; // Sersemleme kontrol�
+
+
 
     void Start()
     {
@@ -43,7 +48,27 @@ public class EnemyAI : MonoBehaviour
     public void TakeDamage(int damageAmount)
     {
         currentHealth -= damageAmount;
-        if (currentHealth <= 0) Destroy(gameObject);
+
+        // ... diğer kodlar ...
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        // --- İŞTE BU SATIRI EKLİYORUZ ---
+        // Eğer ScoreManager varsa, puan ekle
+        if (ScoreManager.instance != null)
+        {
+            ScoreManager.instance.AddScore(scoreValue);
+        }
+        // --------------------------------
+
+        // Efektler vs...
+        Destroy(gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

@@ -1,13 +1,13 @@
 using UnityEngine;
-using TMPro; // TextMeshPro kütüphanesi
+using TMPro;
 
 public class StatsDisplay : MonoBehaviour
 {
     [Header("Ekrandaki Yazýlar")]
-    public TextMeshProUGUI hpText;       // Can yazýsý
-    public TextMeshProUGUI speedText;    // Hýz yazýsý
-    public TextMeshProUGUI fireRateText; // Atýþ hýzý yazýsý
-    public TextMeshProUGUI rangeText;    // Menzil yazýsý
+    public TextMeshProUGUI hpText;
+    public TextMeshProUGUI speedText;
+    public TextMeshProUGUI fireRateText;
+    public TextMeshProUGUI rangeText;
 
     [Header("Player Baðlantýlarý")]
     public PlayerHealth playerHealth;
@@ -16,26 +16,32 @@ public class StatsDisplay : MonoBehaviour
 
     void Update()
     {
-        // MAX CAN YAZISI
+        // MAX CAN
         if (playerHealth != null)
         {
-            hpText.text = "Max Can: " + playerHealth.maxHealth.ToString();
+            hpText.text = "MaxHealth: " + playerHealth.maxHealth.ToString();
         }
 
-        // HIZ YAZISI ("F1" = Virgülden sonra tek basamak göster demek. Örn: 5.5)
+        // HIZ
         if (playerMovement != null)
         {
-            speedText.text = "Hýz: " + playerMovement.moveSpeed.ToString("F1");
+            speedText.text = "Speed: " + playerMovement.moveSpeed.ToString("F1");
         }
 
-        // MENZÝL VE ATIÞ HIZI
+        // --- DÜZELTTÝÐÝMÝZ KISIM BURASI ---
         if (playerAttack != null)
         {
-            // Atýþ hýzý azaldýkça iyidir (bekleme süresi), ama oyuncu bunu anlamayabilir.
-            // O yüzden yanýna 'sn' (saniye) yazýyoruz.
-            fireRateText.text = "Atýþ Süresi: " + playerAttack.fireRate.ToString("F2") + " sn";
+            // Eskisi: Bekleme süresini yazýyordu (0.5 -> 0.4 -> 0.1)
+            // Yenisi: 1 saniyeyi bekleme süresine bölersek "Hýzý" buluruz.
 
-            rangeText.text = "Menzil: " + playerAttack.attackRange.ToString("F1");
+            // Örnek: 1 / 0.5 = 2 (Saniyede 2 mermi)
+            // Örnek: 1 / 0.1 = 10 (Saniyede 10 mermi!)
+
+            float atisHizi = 1f / playerAttack.fireRate;
+
+            fireRateText.text = "AttackSpeed: " + atisHizi.ToString("F1");
+
+            rangeText.text = "Rate: " + playerAttack.attackRange.ToString("F1");
         }
     }
 }

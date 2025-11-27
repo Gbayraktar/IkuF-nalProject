@@ -86,6 +86,13 @@ public class PlayerHealth : MonoBehaviour
 
         // 3. ZAMANI DURDURMAK İÇİN SAYACI BAŞLAT
         StartCoroutine(StopGameAfterDelay());
+        SurvivalTimer timer = FindObjectOfType<SurvivalTimer>();
+        if (timer != null)
+        {
+            timer.StopTimer();
+        }
+
+        Destroy(gameObject);
     }
 
     IEnumerator StopGameAfterDelay()

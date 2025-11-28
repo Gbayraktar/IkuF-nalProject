@@ -22,7 +22,7 @@ public class LevelUpManager : MonoBehaviour
     {
         if (playerHealth != null)
         {
-            playerHealth.IncreaseMaxHealth(20); // 20 Can ekle
+            playerHealth.IncreaseMaxHealth(10); // Daha dengeli
         }
         ClosePanel();
     }
@@ -32,7 +32,7 @@ public class LevelUpManager : MonoBehaviour
     {
         if (playerMovement != null)
         {
-            playerMovement.IncreaseMoveSpeed(1f); // Hýzý 1 birim artýr
+            playerMovement.IncreaseMoveSpeed(0.25f);
         }
         ClosePanel();
     }
@@ -42,8 +42,8 @@ public class LevelUpManager : MonoBehaviour
     {
         if (playerAttack != null)
         {
-            // Bekleme süresinden 0.05 saniye düþ
-            playerAttack.PermanentSpeedUpgrade(0.05f);
+            // %10 Hýzlandýr (Süreyi 0.9 ile çarparsan %10 azalýr)
+            playerAttack.PermanentSpeedUpgrade(0.100f);
         }
         ClosePanel();
     }
@@ -53,8 +53,7 @@ public class LevelUpManager : MonoBehaviour
     {
         if (playerAttack != null)
         {
-            // Menzili 1 birim artýr
-            playerAttack.IncreaseRange(1f);
+            playerAttack.IncreaseRange(0.5f);
         }
         ClosePanel();
     }

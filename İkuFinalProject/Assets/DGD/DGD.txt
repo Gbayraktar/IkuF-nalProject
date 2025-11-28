@@ -1,0 +1,53 @@
+Game Design Document
+1. Overview
+●	Game Title: Shadow Survivor (or Circle of Doom - Working Title)
+●	Genre: Rogue-lite / Survival / Bullet Heaven
+●	Target Audience: +16 teenagers
+●	Summary: A survival game where you get stronger as you kill enemies. The goal is to survive endless waves of monsters by upgrading your stats.
+●	Key Features: Infinite Progression: The character grows stronger with every level up (Health, Speed, Range, etc.).
+●	Physics-Based Combat: Satisfying "Knockback" effect when enemies are hit.
+●	Visual Growth: The player's attack aura (circle) visually expands as the range increases.
+2. Game Mechanics
+●	Core Gameplay: The player controls a character in a top-down arena. The character automatically shoots at the nearest enemy within their range (Circle). The player must dodge enemies, collect XP gems dropped by them, and survive as long as possible.
+●	Controls: 
+●	Movement: WASD or Arrow Keys.
+●	Combat: Automatic (No shooting button).
+●	UI: Mouse is used to select upgrades from the Level Up panel.
+●	Characters: A survivor with a visible "Aura/Circle" around them.
+●	Stats: Max Health, Move Speed, Fire Rate (Attack Speed), Attack Range.
+●	•  Enemies: AI that constantly follows the player. They deal damage on contact and get knocked back when hit by a bullet.
+●	Objects: •  XP Gem: Drops from dead enemies. Flies towards the player like a magnet when the player gets close.
+●	•  Health Potion: Rare loot item. Fully restores the player's health (HealFull).
+●	•  Bullet: Projectiles spawned by the player that travel towards enemies.
+●	Progression System: •  Leveling: When the XP bar fills up, the game pauses, and a "Level Up Panel" appears.
+●	•  Upgrades: The player chooses one of 4 buffs:
+●	Max Health: Increases maximum HP (+10).
+●	Move Speed: Increases walking speed (+0.25).
+●	Fire Rate: Increases attack speed by reducing delay (multiplied by 0.95 for balance).
+●	Range: Increases attack radius and visual circle size (+0.5).
+●	Difficulty Level: •  Scaling: The game does not rely on making enemies infinitely stronger immediately; instead, the challenge comes from the number of enemies and the player's need to manage space.
+●	•  Balance: Player power scaling uses "Diminishing Returns" (percentage-based upgrades) to prevent the character from becoming too overpowered too quickly.
+●	3. Story and World
+●	Story Summary: A lone warrior is trapped in a cursed realm, surrounded by an endless horde of monsters. There is no escape, only the will to survive as long as possible against the encroaching darkness.
+●	Characters: •  The Survivor: A silent protagonist wielding a magical or technological weapon that targets threats automatically.
+●	•  The Horde: Mindless creatures (Zombies, Skeletons, or Shadow Monsters) driven by the desire to destroy the Survivor.
+●	World: A flat, open arena with minimal obstacles to allow for massive hordes. The setting could be a graveyard, a dark dungeon floor, or a wasteland.,
+●	Atmosphere: Dark Fantasy. Tense at the beginning, but becoming chaotic and satisfyingly action-packed as the player powers up.
+●	4. Visuals and Audio
+●	Art Style: 2D Pixel Art. Dark colors for the background, bright colors for bullets and XP gems to make them pop.
+●	Interface (UI): •  HUD (Left): Real-time stats display (Max Health, Speed, Fire Rate/sec, Range).
+●	•  HUD (Top): Survival Timer (MM:SS) and Health Bar.
+●	•  HUD (Bottom/Top): XP Slider Bar with current Level text.
+●	•  Menus: A pause menu for leveling up with distinct buttons.
+●	
+●	Music: Fast-paced, retro-style action music or dark synth-wave.
+●	Sound Effects: •  Shooting sound (Retro shoot/laser).
+●	•  Impact sound (When enemies are hit).
+●	•  XP collection sound (Satisfying "ding" or "pop").
+●	•  Level Up jingle.
+
+5. Additional Information
+●	Reference Games: Vampire Survivors, Brotato, Magic Survival.
+●	Concept Art: [Essential for the "Game Juice" (feel). Enemies must visually react to being hit.
+●	Other: Uses a "Smooth Follow" script with a fixed orthographic size (e.g., 7 or 8) to show a wider area of the battlefield.
+

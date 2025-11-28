@@ -3,54 +3,90 @@ using System.Collections;
 
 public class EnemyAI : MonoBehaviour
 {
-    [Header("Ayarlar")]
-    public Transform player;
-    public float speed = 3f;
-    public float followRange = 5f;
+    [Header("Bileşenler")]
+    private Animator anim;      // Animasyon kontrolcüsü
+    private Rigidbody2D rb;     // Fizik bileşeni
 
-    [Header("Ödül")]
-    public int scoreValue = 10;
+    [Header("Hareket Ayarları")]
+    public Transform player;       // Hedef (Player)
+    public float speed = 3f;       // Yürüme hızı
+    public float followRange = 10f; // Takip mesafesi
 
-    [Header("Sald�r� & Fizik")]
-    public int damage = 20;
-    public float knockbackForce = 10f; // �tme g�c�
-    public float stunTime = 0.3f;      // Ne kadar s�re sersemlesinler?
+    [Header("Can Ayarları")]
+    public int maxHealth = 100;    // Maksimum can (Spawner bunu değiştirebilir)
+    public int currentHealth;      // Anlık can
 
-    private Rigidbody2D rb;
-    private int currentHealth = 100; // Basit can sistemi
-    private bool isKnockedBack = false; // Sersemleme kontrol�
+    [Header("Saldırı & Fizik")]
+    public int damage = 10;            // Player'a vereceği hasar
+    public float knockbackForce = 5f;  // Geri tepme gücü
+    public float stunTime = 0.3f;      // Darbe alınca sersemleme süresi
 
-    public GameObject xpPrefab;
+    [Header("Ödüller")]
+    public GameObject xpPrefab;    // XP Topu Prefabı
+    public int scoreValue = 10;    // Ölünce kaç puan versin?
 
+    // Düşmanın o an sersemleyip sersemlemediğini kontrol eder
+    private bool isKnockedBack = false;
 
     void Start()
     {
+        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        // Player'� bulma kodu
-        if (player == null && GameObject.FindGameObjectWithTag("Player") != null)
-            player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        // Oyuna başlarken canı fulle
+        currentHealth = maxHealth;
+
+        // Player'ı otomatik bul (Eğer elle atanmadıysa)
+        if (player == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+            {
+                player = playerObj.transform;
+            }
+        }
     }
 
     void Update()
     {
         if (player == null) return;
 
-        // E�ER SERSEMLEM��SE (KNOCKBACK YEM��SE) HAREKET ETME!
+        // EĞER SERSEMLEMİŞSE (KNOCKBACK YEMİŞSE) HAREKET ETME!
         if (isKnockedBack) return;
 
-        // Mesafe �l� ve takip et
+        // Player ile mesafe ölç
         float distance = Vector2.Distance(transform.position, player.position);
+
+        // Menzildeyse YÜRÜ
         if (distance < followRange)
         {
+            // Player'a doğru hareket et
             transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+
+            // --- ANİMASYON: YÜRÜME ---
+            if (anim != null) anim.SetFloat("Speed", 1f);
+
+            // --- YÖN ÇEVİRME (FLIP) ---
+            // Player sağda mı solda mı? Ona göre yüzünü dön.
+            if (player.position.x > transform.position.x)
+                transform.localScale = new Vector3(1, 1, 1); // Sağa bak
+            else
+                transform.localScale = new Vector3(-1, 1, 1); // Sola bak
+        }
+        else
+        {
+            // Duruyorsa Idle animasyonuna geç
+            if (anim != null) anim.SetFloat("Speed", 0f);
         }
     }
 
+    // --- HASAR ALMA FONKSİYONU ---
     public void TakeDamage(int damageAmount)
     {
         currentHealth -= damageAmount;
 
-        // ... diğer kodlar ...
+        // --- ANİMASYON: DARBE (HIT) ---
+        if (anim != null) anim.SetTrigger("Hit");
 
         if (currentHealth <= 0)
         {
@@ -58,69 +94,80 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    void Die()
-    {
-        LootBag lootBag = GetComponent<LootBag>();
-        if (lootBag != null)
-        {
-            lootBag.DropLoot();
-        }
-
-        if (xpPrefab != null)
-        {
-            Instantiate(xpPrefab, transform.position, Quaternion.identity);
-        }
-
-
-
-        if (ScoreManager.instance != null)
-        {
-            ScoreManager.instance.AddScore(scoreValue);
-        }
-        // --------------------------------
-
-        // Efektler vs...
-        Destroy(gameObject);
-    }
-
+    // --- ÇARPIŞMA MANTIĞI ---
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
             // 1. PLAYER'A HASAR VER
             PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
-            if (playerHealth != null) playerHealth.TakeDamage(damage);
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(damage);
+            }
 
-            // 2. PLAYER'I GER� FIRLAT (PlayerMovement i�indeki fonksiyonu �a��r)
+            // 2. PLAYER'I GERİ İT (PlayerMovement içindeki fonksiyonu çağır)
             PlayerMovement playerMove = collision.gameObject.GetComponent<PlayerMovement>();
             if (playerMove != null)
             {
-                // Player'a "Benden uzakla�" diyoruz
                 playerMove.CallKnockback(stunTime, knockbackForce, transform);
             }
 
-            // 3. D��MANI (KEND�N�) GER� FIRLAT
+            // 3. DÜŞMANI (KENDİNİ) GERİ İT
             StartCoroutine(EnemyKnockbackRoutine(collision.transform));
         }
     }
 
-    // D��man�n kendi geriye tepme rutini
+    // Düşmanın kendi geriye tepme rutini
     IEnumerator EnemyKnockbackRoutine(Transform playerTransform)
     {
-        isKnockedBack = true; // Takip etmeyi durdur
+        isKnockedBack = true; // Hareketi kilitle
 
-        // Y�n� hesapla: (Benim yerim - Player'�n yeri) = Geriye do�ru
+        // Yönü hesapla: (Benim yerim - Player'ın yeri) = Geriye doğru
         Vector2 direction = (transform.position - playerTransform.position).normalized;
 
-        // Kendine kuvvet uygula
-        rb.linearVelocity = Vector2.zero; // �nceki h�z�n� s�f�rla
+        // Önceki hızı sıfırla ve kuvvet uygula
+        rb.linearVelocity = Vector2.zero;
         rb.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
 
-        // Sersemleme s�resi kadar bekle
+        // Sersemleme süresi kadar bekle
         yield return new WaitForSeconds(stunTime);
 
-        // Normale d�n
-        rb.linearVelocity = Vector2.zero; // Kaymay� durdur
-        isKnockedBack = false;
+        // Normale dön
+        rb.linearVelocity = Vector2.zero;
+        isKnockedBack = false; // Kilidi aç
+    }
+
+    // --- ÖLÜM FONKSİYONU ---
+    void Die()
+    {
+        // 1. PUAN VER
+        if (ScoreManager.instance != null)
+        {
+            ScoreManager.instance.AddScore(scoreValue);
+        }
+
+        // 2. XP DÜŞÜR
+        if (xpPrefab != null)
+        {
+            Instantiate(xpPrefab, transform.position, Quaternion.identity);
+        }
+
+        // 3. GANİMET (LOOT) DÜŞÜR
+        LootBag lootBag = GetComponent<LootBag>();
+        if (lootBag != null)
+        {
+            lootBag.DropLoot();
+        }
+
+        // 4. YOK OL
+        Destroy(gameObject);
+    }
+
+    // Editörde menzili çizgi olarak görmek için
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, followRange);
     }
 }

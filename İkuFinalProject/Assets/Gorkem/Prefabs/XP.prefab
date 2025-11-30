@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xpAmount: 5
-  magnetRange: 1
+  magnetRange: 4
   flySpeed: 5
 --- !u!61 &8113176357714622226
 BoxCollider2D:

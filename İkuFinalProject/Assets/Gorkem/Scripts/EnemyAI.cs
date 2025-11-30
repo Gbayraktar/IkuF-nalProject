@@ -141,10 +141,11 @@ public class EnemyAI : MonoBehaviour
     // --- ÖLÜM FONKSİYONU ---
     void Die()
     {
-        // 1. PUAN VER
         if (ScoreManager.instance != null)
         {
-            ScoreManager.instance.AddScore(scoreValue);
+            ScoreManager.instance.AddScore(scoreValue); // Puan ver
+
+            ScoreManager.instance.AddKill(); // <-- YENİ EKLENEN SATIR (Sayaç Artsın)
         }
 
         // 2. XP DÜŞÜR

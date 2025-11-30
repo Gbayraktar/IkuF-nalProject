@@ -24,19 +24,33 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (isDead) return; // Ölüye vurulmaz
-
         currentHealth -= damage;
-        UpdateUI();
+
+        // --- 1. ANİMASYON (Eksik olan kısım burasıydı) ---
+        // Eğer karakterde Animator varsa 'Hit' tetikleyicisini çalıştır
+        if (animator != null)
+        {
+            animator.SetTrigger("Hit");
+        }
+
+        // --- 2. EKRAN TİTREMESİ ---
+        CameraFollowsysteem cam = Camera.main.GetComponent<CameraFollowsysteem>();
+        if (cam != null)
+        {
+            cam.TriggerShake(0.15f, 0.3f);
+        }
+
+        // --- 3. UI GÜNCELLEME ---
+        if (healthSlider != null)
+        {
+            healthSlider.value = currentHealth;
+        }
+
+        Debug.Log("PLAYER: Hasar aldı! Kalan Can: " + currentHealth);
 
         if (currentHealth <= 0)
         {
             Die();
-        }
-        else
-        {
-            // Yaşıyorsak vurulma animasyonu
-            if (animator != null) animator.SetTrigger("isHit");
         }
     }
 

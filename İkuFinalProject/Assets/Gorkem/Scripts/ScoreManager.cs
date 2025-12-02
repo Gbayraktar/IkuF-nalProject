@@ -47,7 +47,7 @@ public class ScoreManager : MonoBehaviour
         // Puanı Yazdır
         if (scoreText != null)
         {
-            scoreText.text = "PUAN: " + score.ToString();
+            scoreText.text = "SCORE: " + score.ToString();
         }
 
         // Kill Sayısını Yazdır (YENİ)

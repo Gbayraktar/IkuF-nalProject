@@ -17,7 +17,7 @@ public class GameoverManager : MonoBehaviour
         if (ScoreManager.instance != null && finalScoreText != null)
         {
             // ScoreManager'dan puaný çekip yazdýrýyoruz
-            finalScoreText.text = "SKOR: " + ScoreManager.instance.GetScore().ToString();
+            finalScoreText.text = "SCORE: " + ScoreManager.instance.GetScore().ToString();
         }
 
         // Oyunu Durdur

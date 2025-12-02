@@ -30,6 +30,10 @@ public class ScoreManager : MonoBehaviour
         score += amount;
         UpdateUI();
     }
+    public int GetScore()
+    {
+        return score;
+    }
 
     // --- ÖLDÜRME SAYISINI ARTIRMA (YENİ) ---
     public void AddKill()

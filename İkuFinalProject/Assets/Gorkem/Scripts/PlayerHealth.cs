@@ -77,35 +77,58 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
+        // Eğer zaten öldüysek tekrar çalışmasın (Hata önleyici)
+        if (isDead) return;
+
         isDead = true;
         Debug.Log("OYUNCU ÖLDÜ! Animasyon oynatılıyor...");
 
-        // 1. HAREKETLERİ KİLİTLE (Tuşlara basamasın)
-        // Yürüme scriptini kapat
+        // 1. HAREKETLERİ KİLİTLE (Senin kodların)
         if (GetComponent<PlayerMovement>() != null)
             GetComponent<PlayerMovement>().enabled = false;
 
-        // Saldırı scriptini kapat
-        if (GetComponent<PlayerAttacksc>() != null)
+        // Saldırı scriptini kapat (Senin script adın PlayerAttacksc ise onu yaz)
+        if (GetComponent<PlayerAttacksc>() != null) // Veya PlayerAttacksc
             GetComponent<PlayerAttacksc>().enabled = false;
 
         // Kaymayı önlemek için hızı sıfırla
-        GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+        // (Unity sürümüne göre 'velocity' veya 'linearVelocity' olabilir)
+        if (GetComponent<Rigidbody2D>() != null)
+            GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
 
         // 2. ÖLÜM ANİMASYONUNU OYNAT
-        if (animator != null)
+        if (animator != null) // Senin kodunda 'animator' ise burayı değiştir
         {
-            animator.SetTrigger("isDead");
+            animator.SetTrigger("Hit"); // Veya senin animasyonun adı "isDead" ise onu yaz
+            // Tavsiye: Ölüm için ayrı bir "Death" trigger'ı kullanmak daha iyidir.
         }
 
-        // 3. ZAMANI DURDURMAK İÇİN SAYACI BAŞLAT
-        StartCoroutine(StopGameAfterDelay());
+        // 3. SAYACI DURDUR
         SurvivalTimer timer = FindObjectOfType<SurvivalTimer>();
         if (timer != null)
         {
             timer.StopTimer();
         }
 
+        // 4. BEKLEME VE PANEL AÇMA (Coroutine Başlat)
+        StartCoroutine(DeathSequence());
+    }
+
+    // --- ÖLÜM SENARYOSU (Bekleyip Paneli Açar) ---
+    System.Collections.IEnumerator DeathSequence()
+    {
+        // Animasyonun bitmesi için 1.5 saniye bekle (Süreyi kendine göre ayarla)
+        yield return new WaitForSeconds(1.5f);
+
+        // 5. GAME OVER PANELİNİ AÇ
+        GameoverManager gm = FindObjectOfType<GameoverManager>();
+        if (gm != null)
+        {
+            gm.ShowGameOver(); // Bu fonksiyon zaten oyunu donduruyor (TimeScale = 0)
+        }
+
+        // 6. PLAYER'I ARTIK YOK EDEBİLİRİZ
+        // (Panel açıldıktan sonra arkada görünmesini istemiyorsan)
         Destroy(gameObject);
     }
 

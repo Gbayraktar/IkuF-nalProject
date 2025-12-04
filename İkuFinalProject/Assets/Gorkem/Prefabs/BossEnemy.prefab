@@ -201,7 +201,7 @@ MonoBehaviour:
   player: {fileID: 0}
   speed: 5
   followRange: 28.15
-  maxHealth: 2000
+  maxHealth: 50
   currentHealth: 0
   damage: 20
   knockbackForce: 10

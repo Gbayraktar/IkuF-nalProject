@@ -3371,11 +3371,11 @@ MonoBehaviour:
     messageShown: 0
   - name: orta
     prefab: {fileID: 4298860008882341506, guid: 85b1ef0b66eec564d938bf008bb6ce3d, type: 3}
-    startMinute: 3
+    startMinute: 2
     messageShown: 0
   bossPrefab: {fileID: 6786446922949375804, guid: 1941f9e2ea9cdd9489e0bd50caa26bcb, type: 3}
-  bossSpawnMinute: 5
-  bossWarningMessage: "D\u0130KKAT! B\xD6L\xDCM SONU CANAVARI!"
+  bossSpawnMinute: 0
+  bossWarningMessage: Boss Geliyor
   waveWarningText: {fileID: 2141445860}
   spawnInterval: 1
   spawnRadius: 20.4

@@ -20,7 +20,7 @@ public class EnemySpawnner : MonoBehaviour
     [Header("--- BOSS AYARLARI ---")]
     public GameObject bossPrefab;    // Boss Prefabý buraya
     public float bossSpawnMinute = 5f; // Dakika 5
-    public string bossWarningMessage = "DÝKKAT! BÖLÜM SONU CANAVARI!";
+    public string bossWarningMessage = "";
     private bool bossSpawned = false; // Daha önce doðdu mu?
 
     [Header("UI & Genel Ayarlar")]

@@ -157,38 +157,49 @@ public class EnemyAI : MonoBehaviour
     // --- ÖLÜM FONKSİYONU ---
     void Die()
     {
-        // 1. PUAN VER VE LEŞ SAY
+        // --- 1. BOSS ÖLDÜ MÜ KONTROLÜ ---
+        if (isBoss)
+        {
+            Debug.Log("BOSS ÖLDÜ! ZAFER!");
+
+            // A) Hayatta Kalma Süresini Durdur
+            SurvivalTimer timer = FindObjectOfType<SurvivalTimer>();
+            if (timer != null)
+            {
+                timer.StopTimer();
+            }
+
+            // B) OYUN SONU PANELİNİ AÇ (Aynı Panel)
+            GameoverManager gm = FindObjectOfType<GameoverManager>();
+            if (gm != null)
+            {
+                // İstersen burada "KAZANDIN" yazısı yazdırma kodu da eklenebilir
+                // Şimdilik direkt paneli açıyoruz
+                gm.ShowGameOver();
+            }
+
+            // (Zamanı GameOverManager zaten durduruyor, buraya eklemene gerek yok)
+        }
+
+        // --- 2. ÖDÜL SİSTEMİ (Standart) ---
         if (ScoreManager.instance != null)
         {
             ScoreManager.instance.AddScore(scoreValue);
             ScoreManager.instance.AddKill();
         }
-        if (isBoss)
-        {
-            Debug.Log("BOSS ÖLDÜ! OYUN BİTTİ - KAZANDIN!");
 
-            // Oyunu dondur
-            Time.timeScale = 0f;
-
-            // İleride buraya "WinScreen.SetActive(true)" yazacağız.
-            // Şimdilik sadece donması yeterli.
-        }
-
-
-        // 2. XP DÜŞÜR
         if (xpPrefab != null)
         {
             Instantiate(xpPrefab, transform.position, Quaternion.identity);
         }
 
-        // 3. GANİMET (LOOT) DÜŞÜR
         LootBag lootBag = GetComponent<LootBag>();
         if (lootBag != null)
         {
             lootBag.DropLoot();
         }
 
-        // 4. YOK OL
+        // --- 3. YOK ET ---
         Destroy(gameObject);
     }
 

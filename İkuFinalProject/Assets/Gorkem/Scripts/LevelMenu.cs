@@ -51,7 +51,7 @@ public class LevelMenu : MonoBehaviour
     public void LoadLevel1()
     {
         // Sahnenin adýnýn tam olarak "Level1" olduðundan emin ol
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("Gorkem");
     }
 
     public void LoadLevel2()

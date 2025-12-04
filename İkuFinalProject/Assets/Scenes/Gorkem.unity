@@ -3376,10 +3376,12 @@ MonoBehaviour:
   bossPrefab: {fileID: 6786446922949375804, guid: 1941f9e2ea9cdd9489e0bd50caa26bcb, type: 3}
   bossSpawnMinute: 0
   bossWarningMessage: Boss Geliyor
+  bossSpawned: 0
   waveWarningText: {fileID: 2141445860}
   spawnInterval: 1
   spawnRadius: 20.4
   maxEnemies: 10
+  timer: 0
 --- !u!4 &1146545144
 Transform:
   m_ObjectHideFlags: 0

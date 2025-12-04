@@ -85,15 +85,24 @@ LightmapSettings:
     m_PVREnvironmentMIS: 1
     m_PVRCulling: 1
     m_PVRFilteringGaussRadiusDirect: 1
+<<<<<<< HEAD
     m_PVRFilteringGaussRadiusIndirect: 5
     m_PVRFilteringGaussRadiusAO: 2
+=======
+    m_PVRFilteringGaussRadiusIndirect: 1
+    m_PVRFilteringGaussRadiusAO: 1
+>>>>>>> origin/Gorkem
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
+<<<<<<< HEAD
   m_LightingDataAsset: {fileID: 0}
+=======
+  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
+>>>>>>> origin/Gorkem
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -119,6 +128,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+<<<<<<< HEAD
 --- !u!1 &3415301
 GameObject:
   m_ObjectHideFlags: 0
@@ -947,8 +957,13 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
+<<<<<<<< HEAD:İkuFinalProject/Assets/Gorkem/Gorkem.unity
   m_SortingOrder: 3
   m_Sprite: {fileID: -5899926966983344259, guid: 86cfc8b2719abd24ba25e3af80151b94, type: 3}
+========
+  m_SortingOrder: 5
+  m_Sprite: {fileID: -2383692207971566337, guid: 2e984085df569c34a8c6c35e6184ee15, type: 3}
+>>>>>>>> origin/Gorkem:İkuFinalProject/Assets/Scenes/Gorkem.unity
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -7448,3 +7463,9 @@ SceneRoots:
   - {fileID: 1329168488}
   - {fileID: 1146545144}
   - {fileID: 2102407027}
+=======
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots: []
+>>>>>>> origin/Gorkem

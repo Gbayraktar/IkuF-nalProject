@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      NicePng_minecraft-health-bar-png_1734300_0: -8551319771300745677
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

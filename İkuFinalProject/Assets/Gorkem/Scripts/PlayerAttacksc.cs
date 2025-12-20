@@ -20,6 +20,10 @@ public class PlayerAttacksc : MonoBehaviour
     private float initialRange;       // Oyun baþýndaki menzil (Orantý için)
     private Vector3 initialAuraScale; // Oyun baþýndaki halka boyutu (Orantý için)
 
+    [Header("Ses Efektleri")]
+    public AudioClip shootSound;    // Ses dosyasýný buraya sürükleyeceðiz
+    private AudioSource audioSource; // Player'ýn üzerindeki AudioSource
+
     void Start()
     {
         // Baþlangýç deðerlerini hafýzaya alýyoruz
@@ -29,6 +33,7 @@ public class PlayerAttacksc : MonoBehaviour
         {
             initialAuraScale = visualAura.localScale;
         }
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -116,6 +121,11 @@ public class PlayerAttacksc : MonoBehaviour
         Vector2 direction = target.position - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion rotation = Quaternion.Euler(0, 0, angle);
+        if (audioSource != null && shootSound != null)
+        {
+            // PlayOneShot: Seslerin üst üste binmesine izin verir (Taramalý tüfek gibi)
+            audioSource.PlayOneShot(shootSound);
+        }
 
         Instantiate(bulletPrefab, transform.position, rotation);
     }

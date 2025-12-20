@@ -114,6 +114,8 @@ MonoBehaviour:
   stunTime: 0.3
   xpPrefab: {fileID: 1726225282606163049, guid: 7942e68a592c6f24891f11c045ddc546, type: 3}
   scoreValue: 10
+  deathSound: {fileID: 8300000, guid: 4bb1996c063366c48bca88e761006d4f, type: 3}
+  isBoss: 0
 --- !u!50 &2369775192282770610
 Rigidbody2D:
   serializedVersion: 5

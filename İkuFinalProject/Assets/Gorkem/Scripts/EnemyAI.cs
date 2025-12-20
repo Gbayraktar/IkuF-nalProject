@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -25,8 +25,11 @@ public class EnemyAI : MonoBehaviour
     public GameObject xpPrefab;     // XP Topu Prefabı
     public int scoreValue = 10;     // Ölünce kaç puan versin?
 
+    [Header("Ses Efektleri")]
+    public AudioClip deathSound;    // Ölme sesi (Mp3/Wav)
+
     [Header("Boss Ayarı")]
-    public bool isBoss = false;
+    public bool isBoss = false;     // Sadece Boss prefabında işaretle!
 
     // Düşmanın o an sersemleyip sersemlemediğini kontrol eder
     private bool isKnockedBack = false;
@@ -42,10 +45,10 @@ public class EnemyAI : MonoBehaviour
         // Canı fulle
         currentHealth = maxHealth;
 
-        // Başlangıç boyutunu kaydet (Boss ise 3,3,1 kalır)
+        // Başlangıç boyutunu kaydet (Boss ise 3,3,1 kalır, zombiyse 1,1,1)
         defaultScale = transform.localScale;
 
-        // Player'ı otomatik bul
+        // Player'ı otomatik bul (Eğer sürüklemeyi unuttuysan)
         if (player == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -124,8 +127,11 @@ public class EnemyAI : MonoBehaviour
 
             // 2. PLAYER'I GERİ İT
             PlayerMovement playerMove = collision.gameObject.GetComponent<PlayerMovement>();
+            // Eğer senin scriptin adı farklıysa (örn: PlayerMovementSc) burayı değiştir
             if (playerMove != null)
             {
+                // Player scriptinde CallKnockback fonksiyonu varsa çağır
+                // Yoksa hata vermemesi için burayı yorum satırı yapabilirsin
                 playerMove.CallKnockback(stunTime, knockbackForce, transform);
             }
 
@@ -143,7 +149,7 @@ public class EnemyAI : MonoBehaviour
         Vector2 direction = (transform.position - playerTransform.position).normalized;
 
         // Önceki hızı sıfırla ve kuvvet uygula
-        rb.linearVelocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero; // Unity 6 kullanıyorsan rb.linearVelocity yap
         rb.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
 
         // Sersemleme süresi kadar bekle
@@ -157,49 +163,47 @@ public class EnemyAI : MonoBehaviour
     // --- ÖLÜM FONKSİYONU ---
     void Die()
     {
-        // --- 1. BOSS ÖLDÜ MÜ KONTROLÜ ---
+        // 1. SESİ ÇAL (Düşman yok olsa bile ses devam eder)
+        if (deathSound != null)
+        {
+            AudioSource.PlayClipAtPoint(deathSound, transform.position, 1f);
+        }
+
+        // 2. BOSS KONTROLÜ (Eğer bu bir Boss ise oyunu bitir)
         if (isBoss)
         {
             Debug.Log("BOSS ÖLDÜ! ZAFER!");
 
-            // A) Hayatta Kalma Süresini Durdur
+            // Sayacı Durdur
             SurvivalTimer timer = FindObjectOfType<SurvivalTimer>();
-            if (timer != null)
-            {
-                timer.StopTimer();
-            }
+            if (timer != null) timer.StopTimer();
 
-            // B) OYUN SONU PANELİNİ AÇ (Aynı Panel)
+            // Game Over (Win) Ekranını Aç
             GameoverManager gm = FindObjectOfType<GameoverManager>();
-            if (gm != null)
-            {
-                // İstersen burada "KAZANDIN" yazısı yazdırma kodu da eklenebilir
-                // Şimdilik direkt paneli açıyoruz
-                gm.ShowGameOver();
-            }
-
-            // (Zamanı GameOverManager zaten durduruyor, buraya eklemene gerek yok)
+            if (gm != null) gm.ShowGameOver();
         }
 
-        // --- 2. ÖDÜL SİSTEMİ (Standart) ---
+        // 3. PUAN VER VE LEŞ SAY
         if (ScoreManager.instance != null)
         {
             ScoreManager.instance.AddScore(scoreValue);
             ScoreManager.instance.AddKill();
         }
 
+        // 4. XP DÜŞÜR
         if (xpPrefab != null)
         {
             Instantiate(xpPrefab, transform.position, Quaternion.identity);
         }
 
+        // 5. GANİMET (LOOT) DÜŞÜR
         LootBag lootBag = GetComponent<LootBag>();
         if (lootBag != null)
         {
             lootBag.DropLoot();
         }
 
-        // --- 3. YOK ET ---
+        // 6. YOK OL
         Destroy(gameObject);
     }
 

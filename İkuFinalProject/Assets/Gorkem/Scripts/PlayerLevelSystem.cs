@@ -13,14 +13,29 @@ public class PlayerLevelSystem : MonoBehaviour
     public float currentXP = 0;
 
     [Header("Zorluk Ayarý")]
-    public float xpToNextLevel = 10;   // Ýlk seviye için gereken (Örn: 10)
-    public float difficultyIncrease = 5; // Her levelde kaç artacak? (Örn: +5)
+    public float xpToNextLevel = 10;
+    public float difficultyIncrease = 5;
 
     public LevelUpManager levelManager;
+
+    // --- YENÝ EKLENEN KISIM: SES DEÐÝÞKENLERÝ ---
+    [Header("Ses Efektleri")]
+    public AudioClip levelUpSound;   // Editörden ses dosyasýný buraya sürükle
+    private AudioSource audioSource; // Sesi çalacak hoparlör
+    // ---------------------------------------------
 
     void Start()
     {
         UpdateUI();
+
+        // --- YENÝ EKLENEN KISIM: AUDIOSOURCE BULMA ---
+        // Scriptin olduðu objede AudioSource var mý diye bakar, yoksa ekler
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        // ---------------------------------------------
     }
 
     public void GainExperience(int amount)
@@ -47,13 +62,18 @@ public class PlayerLevelSystem : MonoBehaviour
 
         Debug.Log($"LEVEL ATLADIN! Yeni Level: {currentLevel}");
 
-        // --- DEÐÝÞEN KISIM BURASI ---
+        // --- YENÝ EKLENEN KISIM: SESÝ ÇAL ---
+        if (audioSource != null && levelUpSound != null)
+        {
+            audioSource.PlayOneShot(levelUpSound);
+        }
+        // ------------------------------------
+
         // Paneli açmasý için Manager'a haber ver
         if (levelManager != null)
         {
             levelManager.ShowLevelUpOptions();
         }
-        // ----------------------------
 
         UpdateUI();
     }
@@ -72,5 +92,3 @@ public class PlayerLevelSystem : MonoBehaviour
         }
     }
 }
-
-
